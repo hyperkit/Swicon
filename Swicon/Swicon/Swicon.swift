@@ -54,14 +54,14 @@ public class Swicon {
         }
     }
     
-    public func getNSMutableAttributedString(_ iconName: String, fontSize: CGFloat) -> NSMutableAttributedString? {
+    public func getNSMutableAttributedString(_ iconName: String, fontSize: CGFloat, baselineOffset: CGFloat = 0.0) -> NSMutableAttributedString? {
         for fontPrefix in fontsMap.keys {
             if iconName.hasPrefix(fontPrefix) {
                 let iconFont = fontsMap[fontPrefix]!
                 if let iconValue = iconFont.getIconValue(iconName) {
                     let iconUnicodeValue = iconValue.substring(to: iconValue.characters.index(iconValue.startIndex, offsetBy: 1))
                     if let uiFont = iconFont.getUIFont(fontSize) {
-                        let attrs = [NSFontAttributeName : uiFont]
+                        let attrs = [NSFontAttributeName : uiFont, NSBaselineOffsetAttributeName : baselineOffset]
                         return NSMutableAttributedString(string:iconUnicodeValue, attributes:attrs)
                     }
                 }
@@ -70,13 +70,13 @@ public class Swicon {
         return nil
     }
     
-    public func getUIImage(_ iconName: String, iconSize: CGFloat, iconColour: UIColor = UIColor.black, imageSize: CGSize) -> UIImage {
+    public func getUIImage(_ iconName: String, iconSize: CGFloat, iconColour: UIColor = UIColor.black, imageSize: CGSize, baselineOffset: CGFloat = 0.0) -> UIImage {
         let style = NSMutableParagraphStyle()
         style.alignment = NSTextAlignment.left
         style.baseWritingDirection = NSWritingDirection.leftToRight
         
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0);
-        let attString = getNSMutableAttributedString(iconName, fontSize: iconSize)
+        let attString = getNSMutableAttributedString(iconName, fontSize: iconSize, baselineOffset: baselineOffset)
         if attString != nil {
             attString?.addAttributes([NSForegroundColorAttributeName: iconColour, NSParagraphStyleAttributeName: style], range: NSMakeRange(0, attString!.length))
             // get the target bounding rect in order to center the icon within the UIImage:
