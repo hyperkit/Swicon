@@ -54,14 +54,14 @@ public class Swicon {
         }
     }
     
-    public func getNSMutableAttributedString(_ iconName: String, fontSize: CGFloat, baselineOffset: CGFloat = 0.0) -> NSMutableAttributedString? {
+    public func getNSMutableAttributedString(_ iconName: String, fontSize: CGFloat, iconColour: UIColor = UIColor.black, baselineOffset: CGFloat = 0.0) -> NSMutableAttributedString? {
         for fontPrefix in fontsMap.keys {
             if iconName.hasPrefix(fontPrefix) {
                 let iconFont = fontsMap[fontPrefix]!
                 if let iconValue = iconFont.getIconValue(iconName) {
                     let iconUnicodeValue = iconValue.substring(to: iconValue.characters.index(iconValue.startIndex, offsetBy: 1))
                     if let uiFont = iconFont.getUIFont(fontSize) {
-                        let attrs = [NSFontAttributeName : uiFont, NSBaselineOffsetAttributeName : baselineOffset]
+                        let attrs = [NSFontAttributeName : uiFont, NSForegroundColorAttributeName: iconColour, NSBaselineOffsetAttributeName : baselineOffset]
                         return NSMutableAttributedString(string:iconUnicodeValue, attributes:attrs)
                     }
                 }
@@ -76,9 +76,9 @@ public class Swicon {
         style.baseWritingDirection = NSWritingDirection.leftToRight
         
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0);
-        let attString = getNSMutableAttributedString(iconName, fontSize: iconSize, baselineOffset: baselineOffset)
+        let attString = getNSMutableAttributedString(iconName, fontSize: iconSize, iconColour: iconColour, baselineOffset: baselineOffset)
         if attString != nil {
-            attString?.addAttributes([NSForegroundColorAttributeName: iconColour, NSParagraphStyleAttributeName: style], range: NSMakeRange(0, attString!.length))
+            attString?.addAttributes([NSParagraphStyleAttributeName: style], range: NSMakeRange(0, attString!.length))
             // get the target bounding rect in order to center the icon within the UIImage:
             let ctx = NSStringDrawingContext()
             let boundingRect = attString!.boundingRect(with: CGSize(width: iconSize, height: iconSize), options: NSStringDrawingOptions.usesDeviceMetrics, context: ctx)
