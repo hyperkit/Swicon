@@ -61,7 +61,7 @@ public class Swicon {
                 if let iconValue = iconFont.getIconValue(iconName) {
                     let iconUnicodeValue = iconValue.substring(to: iconValue.characters.index(iconValue.startIndex, offsetBy: 1))
                     if let uiFont = iconFont.getUIFont(fontSize) {
-                        let attrs = [NSFontAttributeName : uiFont, NSForegroundColorAttributeName: iconColour, NSBaselineOffsetAttributeName : baselineOffset]
+                        let attrs = [NSFontAttributeName : uiFont, NSForegroundColorAttributeName: iconColour, NSBaselineOffsetAttributeName : baselineOffset] as [String : Any]
                         return NSMutableAttributedString(string:iconUnicodeValue, attributes:attrs)
                     }
                 }
@@ -212,7 +212,7 @@ private func loadFontFromFile(_ fontFileName: String, forClass: AnyClass, isCust
     
     if fontURL != nil {
         let data = try! Data(contentsOf: fontURL!)
-        let provider = CGDataProvider(data: data)
+        let provider = CGDataProvider(data: data as CFData)
         let font = CGFont(provider!)
         
         if (!CTFontManagerRegisterGraphicsFont(font, nil)) {
