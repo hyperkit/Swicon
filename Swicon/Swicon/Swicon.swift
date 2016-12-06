@@ -213,7 +213,7 @@ private func loadFontFromFile(_ fontFileName: String, forClass: AnyClass, isCust
     if fontURL != nil {
         let data = try! Data(contentsOf: fontURL!)
         let provider = CGDataProvider(data: data as CFData)
-        UIFont.familyNames // Fix for randomly crash at CGFontCreateWithDataProvider
+        _ = UIFont.familyNames // Fix for randomly crash at CGFontCreateWithDataProvider
         let font = CGFont(provider!)
         
         if (!CTFontManagerRegisterGraphicsFont(font, nil)) {
