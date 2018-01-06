@@ -59,9 +59,9 @@ public class Swicon {
             if iconName.hasPrefix(fontPrefix) {
                 let iconFont = fontsMap[fontPrefix]!
                 if let iconValue = iconFont.getIconValue(iconName) {
-                    let iconUnicodeValue = iconValue.substring(to: iconValue.characters.index(iconValue.startIndex, offsetBy: 1))
+                    let iconUnicodeValue = String(iconValue[..<iconValue.index(iconValue.startIndex, offsetBy: 1)])
                     if let uiFont = iconFont.getUIFont(fontSize) {
-                        let attrs = [NSFontAttributeName : uiFont, NSForegroundColorAttributeName: iconColour, NSBaselineOffsetAttributeName : baselineOffset] as [String : Any]
+                        let attrs = [NSAttributedStringKey.font : uiFont, NSAttributedStringKey.foregroundColor: iconColour, NSAttributedStringKey.baselineOffset : baselineOffset] as [NSAttributedStringKey : Any]
                         return NSMutableAttributedString(string:iconUnicodeValue, attributes:attrs)
                     }
                 }
@@ -78,7 +78,7 @@ public class Swicon {
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0);
         let attString = getNSMutableAttributedString(iconName, fontSize: iconSize, iconColour: iconColour, baselineOffset: baselineOffset)
         if attString != nil {
-            attString?.addAttributes([NSParagraphStyleAttributeName: style], range: NSMakeRange(0, attString!.length))
+            attString?.addAttributes([NSAttributedStringKey.paragraphStyle: style], range: NSMakeRange(0, attString!.length))
             // get the target bounding rect in order to center the icon within the UIImage:
             let ctx = NSStringDrawingContext()
             let boundingRect = attString!.boundingRect(with: CGSize(width: iconSize, height: iconSize), options: NSStringDrawingOptions.usesDeviceMetrics, context: ctx)
@@ -216,7 +216,7 @@ private func loadFontFromFile(_ fontFileName: String, forClass: AnyClass, isCust
         _ = UIFont.familyNames // Fix for randomly crash at CGFontCreateWithDataProvider
         let font = CGFont(provider!)
         
-        if (!CTFontManagerRegisterGraphicsFont(font, nil)) {
+        if (!CTFontManagerRegisterGraphicsFont(font!, nil)) {
             NSLog("Failed to load font \(fontFileName)");
             return false
         } else {
