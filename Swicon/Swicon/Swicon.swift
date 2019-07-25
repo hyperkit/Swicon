@@ -61,7 +61,7 @@ public class Swicon {
                 if let iconValue = iconFont.getIconValue(iconName) {
                     let iconUnicodeValue = String(iconValue[..<iconValue.index(iconValue.startIndex, offsetBy: 1)])
                     if let uiFont = iconFont.getUIFont(fontSize) {
-                        let attrs = [NSAttributedStringKey.font : uiFont, NSAttributedStringKey.foregroundColor: iconColour, NSAttributedStringKey.baselineOffset : baselineOffset] as [NSAttributedStringKey : Any]
+                        let attrs = [NSAttributedString.Key.font : uiFont, NSAttributedString.Key.foregroundColor: iconColour, NSAttributedString.Key.baselineOffset : baselineOffset] as [NSAttributedString.Key : Any]
                         return NSMutableAttributedString(string:iconUnicodeValue, attributes:attrs)
                     }
                 }
@@ -78,7 +78,7 @@ public class Swicon {
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0);
         let attString = getNSMutableAttributedString(iconName, fontSize: iconSize, iconColour: iconColour, baselineOffset: baselineOffset)
         if attString != nil {
-            attString?.addAttributes([NSAttributedStringKey.paragraphStyle: style], range: NSMakeRange(0, attString!.length))
+            attString?.addAttributes([NSAttributedString.Key.paragraphStyle: style], range: NSMakeRange(0, attString!.length))
             // get the target bounding rect in order to center the icon within the UIImage:
             let ctx = NSStringDrawingContext()
             let boundingRect = attString!.boundingRect(with: CGSize(width: iconSize, height: iconSize), options: NSStringDrawingOptions.usesDeviceMetrics, context: ctx)
@@ -89,7 +89,7 @@ public class Swicon {
             UIGraphicsEndImageContext()
             
             if(iconImage?.responds(to: #selector(UIImage.withRenderingMode(_:))))!{
-                iconImage = iconImage?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+                iconImage = iconImage?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
             }
             
             return iconImage!
